@@ -1,0 +1,231 @@
+﻿@{
+    ViewData["Title"] = "Weather Data";
+}
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font: 16px Arial;
+    }
+
+    .autocomplete {
+        /*the container must be positioned relative:*/
+        position: relative;
+        display: inline-block;
+    }
+
+    input {
+        border: 1px solid transparent;
+        background-color: #f1f1f1;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+        input[type=text] {
+            background-color: #f1f1f1;
+            width: 100%;
+        }
+
+        input[type=submit] {
+            background-color: DodgerBlue;
+            color: #fff;
+        }
+
+    .autocomplete-items {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        border-bottom: none;
+        border-top: none;
+        z-index: 99;
+        /*position the autocomplete items to be the same width as the container:*/
+        top: 100%;
+        left: 0;
+        right: 0;
+    }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+            .autocomplete-items div:hover {
+                /*when hovering an item:*/
+                background-color: #e9e9e9;
+            }
+
+    .autocomplete-active {
+        /*when navigating through the items using the arrow keys:*/
+        background-color: DodgerBlue !important;
+        color: #ffffff;
+    }
+</style>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+
+    <form autocomplete="off" action="/action_page.php">
+        <div class="autocomplete" style="width:300px;">
+            <input id="myInput" type="text" name="myCountry" placeholder="Country">
+            <input id="country_id" type="hidden" name="country_id" />
+        </div>
+
+        <div class="autocomplete" style="width:300px;">
+            <input id="auto_city" type="text" name="auto_city" placeholder="City">
+            <input id="city" type="hidden" name="city" />
+        </div>
+    </form>
+
+    <div class="row mt-5">
+        <table class="table table-dark">
+            <tbody id="tbody">
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    (function () {
+        var $base_url = "https://localhost:44344/";
+        var countries = [];
+
+        function autocomplete(inp, arr, ell, type) {
+            var currentFocus;
+            inp.addEventListener("input", function (e) {
+                var a, b, i, val = this.value;
+                closeAllLists();
+                if (!val) { return false; }
+                currentFocus = -1;
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                this.parentNode.appendChild(a);
+                if (type == 0) {
+                    for (i = 0; i < arr.length; i++) {
+                        var counties_name = arr[i].name;
+                        var counties_code = arr[i].code;
+                        if (counties_name.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                            b = document.createElement("DIV");
+                            b.innerHTML = "<strong>" + counties_name.substr(0, val.length) + "</strong>";
+                            b.innerHTML += counties_name.substr(val.length);
+                            b.innerHTML += "<input type='hidden' value='" + counties_code + "'>";
+                            b.addEventListener("click", function (e) {
+                                var _filter = arr.filter(x => x.code == this.getElementsByTagName("input")[0].value);
+                                inp.value = _filter[0].name;
+                                $("#" + ell).val(_filter[0].code);
+                                closeAllLists();
+                                getCities(_filter[0].code)
+                            });
+                            a.appendChild(b);
+                        }
+                    }
+
+                } else {
+                    for (i = 0; i < arr.length; i++) {
+                        var city_name = arr[i].name;
+                        if (city_name.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                            b = document.createElement("DIV");
+                            b.innerHTML = "<strong>" + city_name.substr(0, val.length) + "</strong>";
+                            b.innerHTML += city_name.substr(val.length);
+                            b.innerHTML += "<input type='hidden' value='" + city_name + "'>";
+                            b.addEventListener("click", function (e) {
+                                inp.value = this.getElementsByTagName("input")[0].value;
+                                $("#" + ell).val(this.getElementsByTagName("input")[0].value);
+                                closeAllLists();
+                                getWeather(inp.value, $("#country_id").val());
+                            });
+                            a.appendChild(b);
+                        }
+                    }
+                }
+
+            });
+            inp.addEventListener("keydown", function (e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    currentFocus++;
+                    addActive(x);
+                } else if (e.keyCode == 38) {
+                    currentFocus--;
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+            function addActive(x) {
+                if (!x) return false;
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+            function removeActive(x) {
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+            function closeAllLists(elmnt) {
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }
+
+        function getWeather(city, country) {
+            $.get($base_url + "api/weatherforecast/GetWeather?city=" + city + "&country=" + country, function (data, status) {
+                var weather = data;
+                renderViewWeather(weather);
+            });
+        }
+
+        function getCities(country_id) {
+            $.get($base_url + "api/weatherforecast/GetCities?search=" + country_id, function (data, status) {
+                var cities = data;
+
+                autocomplete(document.getElementById("auto_city"), cities, "city", 1);
+            });
+        }
+
+
+        $.get($base_url + "api/weatherforecast/GetCountries", function (data, status) {
+            countries = data;
+
+            autocomplete(document.getElementById("myInput"), countries, "country_id", 0);
+        });
+
+
+        function renderViewWeather(data) {
+            $("#tbody").empty();
+
+            $('#tbody').append('<tr><th> Location</th><td>' + data.name + '</td> </tr>');
+            $('#tbody').append('<tr><th>Time</th><td>' + data.timezone + '</td></tr>');
+            $('#tbody').append('<tr><th>Wind</th><td>' + data.wind + '</td></tr>');
+            $('#tbody').append('<tr><th>Visibility</th><td>' + data.visibility + '</td></tr>');
+            $('#tbody').append('<tr><th>Sky conditions</th><td>' + data.sky + '</td></tr>');
+            $('#tbody').append('<tr><th>Temperature</th><td>' + data.celsius + '</td></tr>');
+            $('#tbody').append('<tr><th>Temperature (in Fahrenheit)</th><td>' + data.fahrenheit + '</td></tr>');
+            $('#tbody').append('<tr><th>Dew Point</th><td>' + data.dewPoint + '</td></tr>');
+            $('#tbody').append('<tr><th>Relative Humidity</th><td>' + data.humidity + '</td></tr>');
+            $('#tbody').append('<tr><th>Pressure</th><td>' + data.pressure + '</td></tr>');
+
+        }
+
+    })();
+</script>
