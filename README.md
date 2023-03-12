@@ -17,8 +17,8 @@ An application to read the weather in real time around the world
   
   
  **API **
- Here is the api that is already available and you can use it :
- - To fetch country data {{host}}/api/weatherforecast/GetCountries
+ Here is the api that is already available and you can use it with method GET :
+ - To fetch country data {{host}}/api/weatherforecast/GetCountries 
  - To fetch city data by country {{host}} api/weatherforecast/GetCities?search={{kode_negara}}
  - To retrieve weather data {{host}}/api/weatherforecast/GetWeather?city={{kota}}&country={{kode_nagara}}
  - Result :
