@@ -12,7 +12,7 @@ An application to read the weather in real time around the world
 **App setting **
 - Add the appsettings.json file to the WeatherAPI project to add configuration, then add the following properties
 
-   "OpenweatherBaseURL": "http://api.openweathermap.org/data/2.5/weather",
+   "OpenweatherBaseURL": "http://api.openweathermap.org/data/2.5/weather"
    "OpenweatherAppId": "1d12aa37baa8e0cee75bb42acc519968"
   
   
