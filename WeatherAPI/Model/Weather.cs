@@ -3,7 +3,7 @@
     public class WeatherForecastView
     {
         public string name { get; set; }
-        public int timezone { get; set; }
+        public string time { get; set; }
         public float wind { get; set; }
         public int visibility { get; set; }
         public string sky { get; set; }

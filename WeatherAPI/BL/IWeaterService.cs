@@ -122,7 +122,7 @@ namespace WeatherAPI.BL
                 result = new WeatherForecastView
                 {
                     name = jsonObject.name,
-                    timezone = jsonObject.timezone,
+                    time = DateTime.Now.ToString("dddd, dd MMMM yyyy"),
                     wind = jsonObject.wind.speed,
                     visibility = jsonObject.visibility,
                     sky = jsonObject.weather[0].description,
