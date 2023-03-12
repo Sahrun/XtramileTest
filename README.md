@@ -1,26 +1,26 @@
 # WeatherMap
 
 
-sebuah aplikasi untuk membaca cuaca secara langsung di seluruh dunia
+An application to read the weather in real time around the world
 
 
-**Cara setting aplikasi **
+**How to set the application**
 
-- Download sourcode untuk menjalankan aplikasi di komputer local anda 
-- Open project from IDE disarankan menggunakan visual studio
+- Download the source code to run the application on your local machine
+- Open project from IDE is recommended to use visual studio
 
 **App setting **
-- Tambahkan file appsettings.json pada project WeatherAPI untuk menambahkan konfigurasi , kemudian tambahkan properti berikut ini
+- Add the appsettings.json file to the WeatherAPI project to add configuration, then add the following properties
    "OpenweatherBaseURL": "http://api.openweathermap.org/data/2.5/weather",
    "OpenweatherAppId": "1d12aa37baa8e0cee75bb42acc519968"
   
   
  **API **
- Berikut adalah api yang sudah tersedia dan anda bisa menggunakan nya :
- - Untuk mengambil data negara {{host}}/api/weatherforecast/GetCountries
- - Untuk mengambil data kota berdasarkan negara {{host}} api/weatherforecast/GetCities?search={{kode_negara}}
- - Unutk mengambil data cuaca {{host}}/api/weatherforecast/GetWeather?city={{kota}}&country={{kode_nagara}}
- - Hasil :
+ Here is the api that is already available and you can use it :
+ - To fetch country data {{host}}/api/weatherforecast/GetCountries
+ - To fetch city data by country {{host}} api/weatherforecast/GetCities?search={{kode_negara}}
+ - To retrieve weather data {{host}}/api/weatherforecast/GetWeather?city={{kota}}&country={{kode_nagara}}
+ - Result :
   {
     "name": "Jakarta",
     "timezone": 25200,
@@ -34,7 +34,7 @@ sebuah aplikasi untuk membaca cuaca secara langsung di seluruh dunia
     "pressure": 1012
 }
 
-**Tampilan UI**
+**UI**
 
 ![image](https://user-images.githubusercontent.com/13058978/224521627-e6f6dd06-df34-45b0-af35-020396e8790d.png)
 
@@ -42,6 +42,6 @@ sebuah aplikasi untuk membaca cuaca secara langsung di seluruh dunia
 
 
 
-Untuk sumber data cuaca anda bisa daftar dan mempelajari lebih lanjut di https://openweathermap.org/
+For weather data sources, you can register and learn more at https://openweathermap.org/
 
 
