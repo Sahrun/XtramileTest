@@ -39,7 +39,8 @@ An application to read the weather in real time around the world
 
 ![image](https://user-images.githubusercontent.com/13058978/224521627-e6f6dd06-df34-45b0-af35-020396e8790d.png)
 
-![image](https://user-images.githubusercontent.com/13058978/224521643-fb346690-7f81-4eb3-b428-70d8ecc26c0e.png)
+![image](https://user-images.githubusercontent.com/13058978/224523224-17f4f808-0e86-4b9e-a679-a478e7059eed.png)
+
 
 
 
