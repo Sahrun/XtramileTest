@@ -16,7 +16,7 @@ An application to read the weather in real time around the world
   - "OpenweatherAppId": "1d12aa37baa8e0cee75bb42acc519968"
   
   
- **API **
+ **API**
  Here is the api that is already available and you can use it with method GET :
  - To fetch country data {{host}}/api/weatherforecast/GetCountries 
  - To fetch city data by country {{host}} api/weatherforecast/GetCities?search={{kode_negara}}
